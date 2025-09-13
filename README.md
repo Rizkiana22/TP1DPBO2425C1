@@ -23,7 +23,7 @@ Program dibuat dalam **4 bahasa**: C++, Java, Python, dan PHP.
 8. Menampilkan, mencari, mengubah (`updateTransaksi`), dan menghapus transaksi.
 
 **Contoh Output Console:**
-![Output C++](screenrecords/OutputCpp.mp4)
+[![Output C++](screenrecords/OutputCpp.mp4)](https://github.com/user-attachments/assets/832b6c6f-d0b7-42ff-b0ab-646b01835b30)
 
 ## 2. Java Version
 
