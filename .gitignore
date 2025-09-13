@@ -1,3 +1,3 @@
-.*exe
-.*class
-__pycache__/
+*.exe
+*.class
+*.pyc
