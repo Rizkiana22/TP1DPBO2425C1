@@ -22,8 +22,10 @@ Program dibuat dalam **4 bahasa**: C++, Java, Python, dan PHP.
 8. Menampilkan, mencari, mengubah (`updateTransaksi`), dan menghapus transaksi.
 
 **Contoh Output Console:**
+
 **Gambar:**
 <img width="524" height="860" alt="Image" src="https://github.com/user-attachments/assets/52abac43-997a-452d-939c-873a72662bc1" />
+
 **Video:**
 (https://github.com/user-attachments/assets/832b6c6f-d0b7-42ff-b0ab-646b01835b30)
 
@@ -36,8 +38,10 @@ Program dibuat dalam **4 bahasa**: C++, Java, Python, dan PHP.
 - Update transaksi menggunakan `updateTransaksi(int id, String tanggal, int jumlah)`.
 
 **Contoh Output Console:**
+
 **Gambar:**
 <img width="527" height="894" alt="Image" src="https://github.com/user-attachments/assets/356448ad-1ddf-474c-877d-7822c6f58651" />
+
 **Video:**
 https://github.com/user-attachments/assets/6936ca25-0523-4c4f-8f6a-a621e78dfa73
 
@@ -55,8 +59,10 @@ https://github.com/user-attachments/assets/6936ca25-0523-4c4f-8f6a-a621e78dfa73
 - Update transaksi menggunakan objek `Transaksi` baru.
 
 **Contoh Output Console:**
+
 **Gambar:**
 <img width="612" height="836" alt="Image" src="https://github.com/user-attachments/assets/f489e445-3224-4b57-9239-86d1d145ec6c" />
+
 **Video:**
 https://github.com/user-attachments/assets/8c0b3802-71f5-42e2-9979-62baacf26be5
 
@@ -79,7 +85,9 @@ Semua aksi disimpan kembali ke session dan halaman di-refresh otomatis.
 Tampilan web sederhana menggunakan HTML dan form, dengan tabel untuk menampilkan Produk, Pembeli, dan Transaksi.
 
 **Contoh Penggunaan:**
+
 **Gambar:**
 <img width="1903" height="910" alt="Image" src="https://github.com/user-attachments/assets/e2113c0c-0c0b-48c8-9c52-f2ce164f56cd" />
+
 **Video:**
 https://github.com/user-attachments/assets/3194306e-1bf6-40ed-815d-1e0e1dec9a98
