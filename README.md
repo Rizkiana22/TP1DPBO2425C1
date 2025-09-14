@@ -23,7 +23,7 @@ Program dibuat dalam **4 bahasa**: C++, Java, Python, dan PHP.
 
 **Contoh Output Console:**
 
-**Gambar:**
+
 <img width="524" height="860" alt="Image" src="https://github.com/user-attachments/assets/52abac43-997a-452d-939c-873a72662bc1" />
 
 **Video:**
@@ -39,7 +39,7 @@ Program dibuat dalam **4 bahasa**: C++, Java, Python, dan PHP.
 
 **Contoh Output Console:**
 
-**Gambar:**
+
 <img width="527" height="894" alt="Image" src="https://github.com/user-attachments/assets/356448ad-1ddf-474c-877d-7822c6f58651" />
 
 **Video:**
@@ -60,7 +60,7 @@ https://github.com/user-attachments/assets/6936ca25-0523-4c4f-8f6a-a621e78dfa73
 
 **Contoh Output Console:**
 
-**Gambar:**
+
 <img width="612" height="836" alt="Image" src="https://github.com/user-attachments/assets/f489e445-3224-4b57-9239-86d1d145ec6c" />
 
 **Video:**
