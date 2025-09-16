@@ -1,124 +1,87 @@
 <?php
-require_once "Produk.php";
-require_once "Pembeli.php";
-require_once "Transaksi.php";
+session_start();
 
-class Toko {
-    // atribut
-    private $daftarProduk = [];
-    private $daftarPembeli = [];
-    private $daftarTransaksi = [];
+class TokoElektronik {
+    // Property private untuk simpan daftar produk
+    private $daftar_produk;
 
-    // constructor
+    // Konstruktor
     public function __construct() {
+        if (!isset($_SESSION['daftar_produk'])) {
+            $_SESSION['daftar_produk'] = [];
+        }
+        // Simpan referensi session ke property
+        $this->daftar_produk = &$_SESSION['daftar_produk'];
     }
 
-    // ========= method =========== //
-    // Produk
-    // method untuk menambah produk
-    public function tambahProduk(Produk $produk) {
-        $this->daftarProduk[] = $produk;
-    }
-
-    // method untuk mendapatkan daftar produk
-    public function getDaftarProduk() {
-        return $this->daftarProduk; // array (tidak pernah null)
-    }
-
-    // method untuk mengubah data produk berdasarkan ID
-    public function updateProduk($id, $nama, $harga, $stok, $gambar = "null") {
-        foreach ($this->daftarProduk as $produk) {
-            if ($produk->getId() == $id) {
-                $produk->setNama($nama);
-                $produk->setHarga($harga);
-                $produk->setStok($stok);
-                if ($gambar) $produk->setGambar($gambar);
+    // Mencari produk berdasarkan ID
+    private function cariProduk($id, &$idx) {
+        foreach ($this->daftar_produk as $i => $produk) {
+            if ($produk['id'] == $id) {
+                $idx = $i;
                 return true;
             }
+        }
+        $idx = -1;
+        return false;
+    }
+
+    // Menambahkan produk baru
+    public function tambahProduk($id, $nama, $harga, $stok, $gambar) {
+        $this->daftar_produk[] = [
+            'id'    => $id,
+            'nama'  => $nama,
+            'harga' => $harga,
+            'stok'  => $stok,
+            'gambar'=> $gambar
+        ];
+    }
+
+    // Mengambil semua produk
+    public function getProduk() {
+        return $this->daftar_produk;
+    }
+
+    // Update produk
+    public function updateProduk($id, $nama, $harga, $stok, $gambar) {
+        $idx = -1;
+        if ($this->cariProduk($id, $idx)) {
+            $this->daftar_produk[$idx]['nama']  = $nama;
+            $this->daftar_produk[$idx]['harga'] = $harga;
+            $this->daftar_produk[$idx]['stok']  = $stok;
+            if ($gambar) {
+                $this->daftar_produk[$idx]['gambar'] = $gambar;
+            }
+            return true;
         }
         return false;
     }
 
-    // method untuk menghapus produk berdasarkan ID
+    // Hapus produk
     public function hapusProduk($id) {
-        foreach ($this->daftarProduk as $key => $produk) {
-            if ($produk->getId() == $id) {
-                unset($this->daftarProduk[$key]);
-                $this->daftarProduk = array_values($this->daftarProduk); // rapihin index
-                return true;
-            }
+        $idx = -1;
+        if ($this->cariProduk($id, $idx)) {
+            array_splice($this->daftar_produk, $idx, 1);
+            return true;
         }
         return false;
     }
 
-    // Pembeli
-    // method untuk menambah pembeli
-    public function tambahPembeli(Pembeli $pembeli) {
-        $this->daftarPembeli[] = $pembeli;
-    }
-   
-    // method untuk mendapatkan daftar pembeli
-    public function getDaftarPembeli() {
-        return $this->daftarPembeli;
+    // Cari produk berdasarkan nama
+    public function cariProdukByNama($keyword) {
+        // menggunakan metode array filter welllll
+        return array_values(array_filter($this->daftar_produk, function ($produk) use ($keyword) {
+            return stripos($produk['nama'], $keyword) !== false;
+        }));
     }
 
-    // method untuk mengubah data pembeli berdasarkan ID
-    public function updatePembeli($id, $nama, $alamat, $telp, $gambar = "null") {
-        foreach ($this->daftarPembeli as $pembeli) {
-            if ($pembeli->getId() == $id) {
-                $pembeli->setNama($nama);
-                $pembeli->setAlamat($alamat);
-                $pembeli->setTelp($telp);
-                if ($gambar) $pembeli->setGambar($gambar);
-                return true;
-            }
+    // Ambil produk berdasarkan ID
+    public function getProdukById($id) {
+        $idx = -1;
+        if ($this->cariProduk($id, $idx)) {
+            return $this->daftar_produk[$idx];
         }
-        return false;
-    }
-
-    // method untuk menghapus pembeli berdasarkan ID
-    public function hapusPembeli($id) {
-        foreach ($this->daftarPembeli as $key => $pembeli) {
-            if ($pembeli->getId() == $id) {
-                unset($this->daftarPembeli[$key]);
-                $this->daftarPembeli = array_values($this->daftarPembeli);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Transaksi
-    // method untuk menambah transaksi
-    public function tambahTransaksi(Transaksi $transaksi) {
-        $this->daftarTransaksi[] = $transaksi;
-    }
-
-    // method untuk menghapus transaksi berdasarkan ID
-    public function hapusTransaksi($id) {
-        foreach ($this->daftarTransaksi as $key => $transaksi) {
-            if ($transaksi->getId() == $id) {
-                unset($this->daftarTransaksi[$key]);
-                $this->daftarTransaksi = array_values($this->daftarTransaksi);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // method untuk mengubah data transaksi berdasarkan ID
-    public function updateTransaksi($id, $jumlah) {
-        foreach ($this->daftarTransaksi as $transaksi) {
-            if ($transaksi->getId() == $id) {
-                $transaksi->setJumlah($jumlah);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // method untuk mendapatkan daftar transaksi
-    public function getDaftarTransaksi() {
-        return $this->daftarTransaksi;
+        return null;
     }
 }
+?>

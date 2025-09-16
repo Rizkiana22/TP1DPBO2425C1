@@ -1,80 +1,75 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Buat objek Toko
-        Toko tokoElektronik = new Toko();
+        TokoElektronik toko = new TokoElektronik(); // Membuat objek TokoElektronik
+        Scanner sc = new Scanner(System.in); // Scanner untuk input
 
-        // Intro / banner
-        System.out.println("===========================================");
-        System.out.println("     SELAMAT DATANG DI TOKO ELEKTRONIK");
-        System.out.println("        Sistem Manajemen Sederhana");
-        System.out.println("===========================================\n");
+        int pilihan = 0;
 
-        // ================== TAMBAH PRODUK ==================
-        System.out.println(">>> Menambahkan Produk:");
-        tokoElektronik.tambahProduk(new Produk(1, "Laptop", 80000, 5));
-        tokoElektronik.tambahProduk(new Produk(2, "HP", 30000, 10));
+        // Menu interaktif
+        while (pilihan != 6) {
+            System.out.println("\n=== Menu Toko Elektronik ===");
+            System.out.println("1. Tambah Produk");
+            System.out.println("2. Tampilkan Produk");
+            System.out.println("3. Update Produk");
+            System.out.println("4. Hapus Produk");
+            System.out.println("5. Cari Produk (berdasarkan nama)");
+            System.out.println("6. Keluar");
+            System.out.print("Pilihan: ");
+            pilihan = sc.nextInt();
+            sc.nextLine(); // consume newline
 
-        // Tampilkan semua produk
-        System.out.println("\n>>> Semua Produk:");
-        tokoElektronik.tampilkanSemuaProduk();
+            // memilih opsi
+            switch (pilihan) {
+                case 1: // Tambah Produk
+                    System.out.print("Masukkan ID Produk: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Masukkan Nama Produk: ");
+                    String nama = sc.nextLine();
+                    System.out.print("Masukkan Harga Produk: ");
+                    double harga = sc.nextDouble();
+                    System.out.print("Masukkan Stok Produk: ");
+                    int stok = sc.nextInt();
+                    sc.nextLine();
+                    toko.tambahProduk(id, nama, harga, stok);
+                    break;
+                case 2: // Tampilkan Produk
+                    toko.tampilkanProduk();
+                    break;
+                case 3: // Update Produk
+                    System.out.print("Masukkan ID Produk yang ingin diupdate: ");
+                    id = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Masukkan Nama Baru: ");
+                    nama = sc.nextLine();
+                    System.out.print("Masukkan Harga Baru: ");
+                    harga = sc.nextDouble();
+                    System.out.print("Masukkan Stok Baru: ");
+                    stok = sc.nextInt();
+                    sc.nextLine();
+                    toko.updateProduk(id, nama, harga, stok);
+                    break;
+                case 4: // Hapus Produk
+                    System.out.print("Masukkan ID Produk yang ingin dihapus: ");
+                    id = sc.nextInt();
+                    sc.nextLine();
+                    toko.hapusProduk(id);
+                    break;
+                case 5: // Cari Produk
+                    System.out.print("Masukkan keyword nama produk: ");
+                    String keyword = sc.nextLine();
+                    toko.cariProdukByNama(keyword);
+                    break;
+                case 6: // Keluar
+                    System.out.println("Keluar dari program.");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid.");
+            }
+        }
 
-        // Cari produk
-        System.out.println("\n>>> Cari Produk (Laptop):");
-        tokoElektronik.cariProduk("Laptop");
-
-        // Update produk
-        System.out.println("\n>>> Update Produk (ID 1 -> Laptop Gaming 90000):");
-        tokoElektronik.ubahProduk(1, new Produk(1, "Laptop Gaming", 90000, 3));
-        tokoElektronik.tampilkanSemuaProduk();
-
-        // Hapus produk
-        System.out.println("\n>>> Hapus Produk (ID 2):");
-        tokoElektronik.hapusProduk(2);
-        tokoElektronik.tampilkanSemuaProduk();
-
-        // ================== TAMBAH PEMBELI ==================
-        System.out.println("\n>>> Menambahkan Pembeli:");
-        tokoElektronik.tambahPembeli(new Pembeli(1, "Budi", "Bandung", "081234567"));
-        tokoElektronik.tambahPembeli(new Pembeli(2, "Siti", "Jakarta", "082345678"));
-
-        // Tampilkan semua pembeli
-        System.out.println("\n>>> Semua Pembeli:");
-        tokoElektronik.tampilkanSemuaPembeli();
-
-        // Cari pembeli
-        System.out.println("\n>>> Cari Pembeli (Budi):");
-        tokoElektronik.cariPembeli("Budi");
-
-        // Update pembeli
-        System.out.println("\n>>> Update Pembeli (ID 1 -> Budi Pratama):");
-        tokoElektronik.ubahPembeli(1, new Pembeli(1, "Budi Pratama", "Bandung", "081234567"));
-        tokoElektronik.tampilkanSemuaPembeli();
-
-        // Hapus pembeli
-        System.out.println("\n>>> Hapus Pembeli (ID 2):");
-        tokoElektronik.hapusPembeli(2);
-        tokoElektronik.tampilkanSemuaPembeli();
-
-        // ================== TAMBAH TRANSAKSI ==================
-        System.out.println("\n>>> Menambahkan Transaksi:");
-        tokoElektronik.tambahTransaksi(1, 1, 1, "2025-09-11", 2); // Budi beli Laptop Gaming 2 unit
-
-        // Tampilkan semua transaksi
-        System.out.println("\n>>> Semua Transaksi:");
-        tokoElektronik.tampilkanSemuaTransaksi();
-
-        // Update transaksi
-        System.out.println("\n>>> Update Transaksi (ID 1 -> Jumlah 1):");
-        tokoElektronik.updateTransaksi(1, "2025-09-11", 1); 
-        tokoElektronik.tampilkanSemuaTransaksi();
-
-        // Hapus transaksi
-        System.out.println("\n>>> Hapus Transaksi (ID 1):");
-        tokoElektronik.hapusTransaksi(1);
-        tokoElektronik.tampilkanSemuaTransaksi();
-
-        // Lihat stok produk terakhir
-        System.out.println("\n>>> Stok Produk Terakhir:");
-        tokoElektronik.tampilkanSemuaProduk();
+        sc.close(); // Menutup scanner
     }
 }
