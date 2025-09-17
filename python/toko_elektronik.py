@@ -1,78 +1,100 @@
 class TokoElektronik:
-    def __init__(self):
-        # daftar_produk: list dari dict
-        self.daftar_produk = []
+    # ===== constructor =====
+    def __init__(self, id=0, nama="", harga=0, stok=0):
+        self.__id = id
+        self.__nama = nama
+        self.__harga = harga
+        self.__stok = stok
+        self.__daftar_produk = []  # list untuk menyimpan produk
 
-    # fungsi cari_produk dengan parameter output
-    # methode mencari produk berdasarkan id
+    # ===== Getter =====
+    def get_id(self):
+        return self.__id
+
+    def get_nama(self):
+        return self.__nama
+
+    def get_harga(self):
+        return self.__harga
+
+    def get_stok(self):
+        return self.__stok
+
+    # ===== Setter =====
+    def set_id(self, id):
+        self.__id = id
+
+    def set_nama(self, nama):
+        self.__nama = nama
+
+    def set_harga(self, harga):
+        self.__harga = harga
+
+    def set_stok(self, stok):
+        self.__stok = stok
+
+    # ===== Method =====
+    # SEARCH
+    # method untuk mencari produk berdasarkan id
     def cari_produk(self, id):
-        idx = -1
         i = 0
-        while i < len(self.daftar_produk) and idx == -1:
-            if self.daftar_produk[i]["id"] == id:
-                idx = i
+        while i < len(self.__daftar_produk):
+            if self.__daftar_produk[i].get_id() == id:
+                return self.__daftar_produk[i]
             i += 1
-        return (idx != -1, idx)
+        return None
+    
+    # method cari produk berdasarkan keyword nama
+    def cari_produk_by_nama(self, keyword):
+        hasil = []
+        i = 0
+        while i < len(self.__daftar_produk):
+            if keyword.lower() in self.__daftar_produk[i].get_nama().lower():
+                hasil.append(self.__daftar_produk[i])
+            i += 1
+        return hasil
+
+
 
     # CREATE
-    # method menambahkan produk baru
-    def tambah_produk(self, id, nama, harga, stok):
-        # menambahkan produk baru ke list
-        self.daftar_produk.append({
-            "id": id,
-            "nama": nama,
-            "harga": harga,
-            "stok": stok
-        })
+    # method untuk menambahkan produk ke list
+    def tambah_produk(self, produk):
+        self.__daftar_produk.append(produk)
         print("Produk berhasil ditambahkan!")
 
     # READ
-    # method menampilkan produk di list
+    # method untuk menampilkan produk
     def tampilkan_produk(self):
-        if not self.daftar_produk:
-            print("Tidak ada produk.")
-            return
-        print("\n=== Daftar Produk ===")
-        i = 0
-        while i < len(self.daftar_produk):
-            p = self.daftar_produk[i]
-            print(f"ID: {p['id']} | Nama: {p['nama']} | Harga: Rp{p['harga']} | Stok: {p['stok']}")
-            i += 1
+        if len(self.__daftar_produk) == 0:
+            print("Belum ada produk.")
+        else:
+            print("\nDaftar Produk:")
+            for p in self.__daftar_produk:
+                print(f"ID: {p.get_id()} | Nama: {p.get_nama()} | Harga: {p.get_harga()} | Stok: {p.get_stok()}")
 
     # UPDATE
-    # method mengubah informasi produk di list
-    def update_produk(self, id, nama_baru, harga_baru, stok_baru):
-        found, idx = self.cari_produk(id)
-        if found:
-            p = self.daftar_produk[idx]
-            p["nama"] = nama_baru
-            p["harga"] = harga_baru
-            p["stok"] = stok_baru
-            print("Produk berhasil diupdate!")
-        else:
+    # method untuk mengubah produk di daftarProduk berdasarkan id
+    def update_produk(self, id):
+        p = self.cari_produk(id)
+        if p is None:
             print(f"Produk dengan ID {id} tidak ditemukan.")
+        else:
+            nama = input("Nama baru: ")
+            harga = int(input("Harga baru: "))
+            stok = int(input("Stok baru: "))
+            p.set_nama(nama)
+            p.set_harga(harga)
+            p.set_stok(stok)
+            print("Produk berhasil diubah!")
 
     # DELETE
-    # method menghapus produk di list
+    # method untuk menghapus produk di daftarProduk
     def hapus_produk(self, id):
-        found, idx = self.cari_produk(id)
-        if found:
-            self.daftar_produk.pop(idx)
-            print("Produk berhasil dihapus!")
-        else:
-            print(f"Produk dengan ID {id} tidak ditemukan.")
-
-    # SEARCH
-    # method mencari produk berdasarkan nama
-    def cari_produk_by_nama(self, keyword):
-        ketemu = False
-        print(f"\nHasil pencarian untuk \"{keyword}\":")
         i = 0
-        while i < len(self.daftar_produk):
-            p = self.daftar_produk[i]
-            if keyword in p["nama"]:
-                print(f"ID: {p['id']} | Nama: {p['nama']} | Harga: Rp{p['harga']} | Stok: {p['stok']}")
-                ketemu = True
+        while i < len(self.__daftar_produk):
+            if self.__daftar_produk[i].get_id() == id:
+                self.__daftar_produk.pop(i)
+                print(f"Produk dengan ID {id} berhasil dihapus.")
+                return
             i += 1
-        if not ketemu:
-            print("Produk tidak ditemukan.")
+        print(f"Produk dengan ID {id} tidak ditemukan.")

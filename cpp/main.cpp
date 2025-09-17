@@ -1,78 +1,71 @@
-#include "tokoElektronik.cpp" // Include file implementasi kelas TokoElektronik
 #include <iostream>
+#include <string>
+#include "TokoElektronik.cpp" // include toko
 using namespace std;
 
 int main() {
-    TokoElektronik toko;   // Membuat objek toko
-    int pilihan, id, stok; // Variabel untuk menu, id produk, dan stok produk
-    string nama, keyword;  // Variabel untuk nama produk dan keyword pencarian
-    double harga;          // Variabel harga produk
+    TokoElektronik toko; // membuat objek toko
+    int pilihan; // untuk pilihan 
 
-    // Perulangan menu utama (akan terus berjalan sampai pilihan = 6)
     do {
-        cout << "\n=== Menu Toko Elektronik ===\n";
+        // Menu
+        cout << "\nMenu Toko Elektronik: \n";
         cout << "1. Tambah Produk\n";
-        cout << "2. Tampilkan Produk\n";
+        cout << "2. Lihat Produk\n";
         cout << "3. Update Produk\n";
         cout << "4. Hapus Produk\n";
-        cout << "5. Cari Produk (berdasarkan nama)\n";
+        cout << "5. Cari Produk\n";
         cout << "6. Keluar\n";
-        cout << "Pilihan: ";
+        cout << "Pilih: ";
         cin >> pilihan;
 
-        // Pilihan menu
-        switch (pilihan) {
-        case 1: // Tambah produk baru
-            cout << "Masukkan ID Produk: ";
-            cin >> id;
-            cin.ignore(); // digunakan agar input string tidak terlewat setelah input angka.
-            cout << "Masukkan Nama Produk: ";
-            getline(cin, nama);
-            cout << "Masukkan Harga Produk: ";
-            cin >> harga;
-            cout << "Masukkan Stok Produk: ";
-            cin >> stok;
-            toko.tambahProduk(id, nama, harga, stok); // Panggil method tambahProduk
-            break;
+        if (pilihan == 1) { // tambah produk
+            int id, harga, stok;
+            string nama;
+            cout << "Masukkan ID: "; cin >> id;
+            cout << "Masukkan Nama: "; cin.ignore(); getline(cin, nama);
+            cout << "Masukkan Harga: "; cin >> harga;
+            cout << "Masukkan Stok: "; cin >> stok;
 
-        case 2: // Tampilkan semua produk
+            TokoElektronik p(id, nama, harga, stok);
+            toko.tambahProduk(p);
+        } else if (pilihan == 2) { // menampilkan produk
             toko.tampilkanProduk();
-            break;
-
-        case 3: // Update produk berdasarkan ID
-            cout << "Masukkan ID Produk yang ingin diupdate: ";
+        } else if (pilihan == 3) { // mengupdate produk
+            int id;
+            cout << "Masukkan ID produk yang ingin diupdate: ";
             cin >> id;
-            cin.ignore(); // digunakan agar input string tidak terlewat setelah input angka.
-            cout << "Masukkan Nama Baru: ";
-            getline(cin, nama);
-            cout << "Masukkan Harga Baru: ";
-            cin >> harga;
-            cout << "Masukkan Stok Baru: ";
-            cin >> stok;
-            toko.updateProduk(id, nama, harga, stok); // Panggil method updateProduk
-            break;
-
-        case 4: // Hapus produk berdasarkan ID
-            cout << "Masukkan ID Produk yang ingin dihapus: ";
-            cin >> id;
-            toko.hapusProduk(id); // Panggil method hapusProduk
-            break;
-
-        case 5: // Cari produk berdasarkan keyword nama
-            cin.ignore();
+            toko.updateProduk(id);
+        } else if (pilihan == 4) { // menghapus produk
+            int id;
+            cout << "Masukkan ID produk yang ingin dihapus: "; cin >> id;
+            toko.hapusProduk(id);
+        }else if(pilihan == 5){ // mencari produk dari nama
+            string keyword;
             cout << "Masukkan keyword nama produk: ";
+            cin.ignore(); 
             getline(cin, keyword);
-            toko.cariProdukByNama(keyword); // Panggil method cariProdukByNama
-            break;
 
-        case 6: // Keluar dari program
-            cout << "Keluar dari program.\n";
-            break;
+            vector<TokoElektronik> hasil = toko.cariProdukByNama(keyword);
 
-        default: // Jika input tidak valid
-            cout << "Pilihan tidak valid.\n";
+            if (hasil.empty()) {
+                cout << "Produk dengan keyword \"" << keyword << "\" tidak ditemukan.\n";
+            } else {
+                cout << "Hasil pencarian:\n";
+                for (auto &p : hasil) {
+                    cout << "ID: " << p.getId()
+                        << " | Nama: " << p.getNama()
+                        << " | Harga: " << p.getHarga()
+                        << " | Stok: " << p.getStok() << endl;
+                }
+            }
+        }else if (pilihan == 6) { // keluar program
+                cout << "Keluar dari program.\n";
+            } else { // error handling
+                cout << "Pilihan tidak valid, coba lagi.\n";
+            }
+
+    } while (pilihan != 6);
+
+            return 0;
         }
-    } while (pilihan != 6); // Ulang terus sampai pilih keluar
-
-    return 0;
-}

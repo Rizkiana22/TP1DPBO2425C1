@@ -3,105 +3,157 @@
 #include <string>
 using namespace std;
 
+// membuat class
 class TokoElektronik {
-private:
-    struct Produk {
+    private:
         int id;
         string nama;
-        double harga;
+        int harga;
         int stok;
-    };
 
-    vector<Produk> daftarProduk; // vector untuk menyimpan struct Produk
+        // vector untuk menyimpan class TokoElektronik
+        vector<TokoElektronik> daftarProduk;
 
-public:
-    // CONSTRUCTOR
-    TokoElektronik() {
-    }
+    public:
+        // constructor
+        TokoElektronik(){
+        }
+        TokoElektronik(int id, string nama, int harga, int stok) {
+            this->id = id;
+            this->nama = nama;
+            this->harga = harga;
+            this->stok = stok;
+        }
 
-    // Fungsi public untuk mencari index produk berdasarkan ID
-    int cariProduk(int id){
-        int i = 0;
-        int idx = -1; // default jika tidak ditemukan
-        while (i < daftarProduk.size() && idx == -1) {
-            if (daftarProduk[i].id == id) {
-                idx = i; // simpan indeks
+        // ===== getter ===== //
+        int getId(){
+            return this->id;
+        }
+
+        string getNama(){
+            return this->nama;
+        }
+
+        int getHarga(){
+            return this->harga;
+        }
+
+        int getStok(){
+            return this->stok;
+        }
+
+        // ===== setter ===== //
+        void setId(int id){
+            this->id = id;
+        }
+
+        void setNama(string nama){
+            this->nama = nama;
+        }
+
+        void setHarga(int harga){
+            this->harga = harga;
+        }
+
+        void setStok(int stok){
+            this->stok = stok;
+        }
+
+        // === method === //
+
+        // SEARCH
+        // method untuk mencari produk berdasarkan id
+        TokoElektronik* cariProduk(int id) {
+            int i = 0;
+            while (i < daftarProduk.size()) {
+                if (daftarProduk[i].getId() == id) {
+                    return &daftarProduk[i]; // return alamat produk
+                }
+                i++;
             }
-            i++;
+            return nullptr; // tidak ketemu
         }
-        return idx; // kembalikan -1 jika tidak ada yang cocok
-    }
 
-
-    // CREATE
-    // method untuk menambah produk baru
-    void tambahProduk(int id, string nama, double harga, int stok) {
-        daftarProduk.push_back({id, nama, harga, stok});
-        cout << "Produk berhasil ditambahkan!\n";
-    }
-
-    // READ
-    // method untuk menampilkan semua produk
-    void tampilkanProduk() const {
-        if (daftarProduk.empty()) {
-            cout << "Tidak ada produk.\n";
-            return;
+        // method cari produk berdasarkan keyword nama
+        vector<TokoElektronik> cariProdukByNama(const string& keyword) { // data disimpan ke vector
+            vector<TokoElektronik> hasil;
+            int i = 0;
+            while (i < daftarProduk.size()) {
+                if (daftarProduk[i].getNama().find(keyword) != string::npos) {
+                    hasil.push_back(daftarProduk[i]);
+                }
+                i++;
+            }
+            return hasil;
         }
-        cout << "\n=== Daftar Produk ===\n";
-        for (const auto &p : daftarProduk) {
-            cout << "ID: " << p.id
-                 << " | Nama: " << p.nama
-                 << " | Harga: Rp" << p.harga
-                 << " | Stok: " << p.stok
-                 << endl;
-        }
-    }
 
-    // UPDATE
-    // method untuk mengupdate produk berdasarkan ID
-    void updateProduk(int id, string namaBaru, double hargaBaru, int stokBaru) {
-        int idx = cariProduk(id);
-        if (idx != -1) {
-            daftarProduk[idx].nama = namaBaru;
-            daftarProduk[idx].harga = hargaBaru;
-            daftarProduk[idx].stok = stokBaru;
-            cout << "Produk berhasil diupdate!\n";
-        } else {
+
+        // CREATE
+        // method untuk menambahkan produk ke vector
+        void tambahProduk(TokoElektronik &p){
+            daftarProduk.push_back(p);
+            cout << "Produk berhasil ditambahkan!\n";
+        }
+
+        // READ
+        // method untuk menampilkan produk
+        void tampilkanProduk(){
+            if(daftarProduk.empty()){ // jika vector daftarProduk kosong
+                cout << "Belum ada produk.\n";
+            }else{ // jika vector daftarProduk tidak kosong
+                cout << "\nDaftar Produk:\n";
+                // menampilkan isi vector daftarProduk
+                for (auto &p : daftarProduk) {
+                    cout << "ID: " << p.getId()
+                        << " | Nama: " << p.getNama()
+                        << " | Harga: " << p.getHarga()
+                        << " | Stok: " << p.getStok() << endl;
+                }
+            }
+        }
+
+        // UPDATE
+        // method untuk mengubah produk di daftarProduk berdasarkan id
+        void updateProduk(int id) {
+            TokoElektronik* p = cariProduk(id); // cari produk dulu
+            if (p == nullptr) {
+                cout << "Produk dengan ID " << id << " tidak ditemukan.\n";
+            }else{
+                // kalau produk ada, baru minta input
+                string nama;
+                int harga, stok;
+    
+                cin.ignore(); // buang newline
+                cout << "Nama baru: "; getline(cin, nama);
+                cout << "Harga baru: "; cin >> harga;
+                cout << "Stok baru: "; cin >> stok;
+    
+                // update field
+                p->setNama(nama);
+                p->setHarga(harga);
+                p->setStok(stok);
+    
+                cout << "Produk berhasil diubah!\n";
+            }
+        }
+
+        
+        // DELETE
+        // method untuk menghapus produk di daftarProduk
+        void hapusProduk(int id){
+            int i = 0;
+            while (i < daftarProduk.size()) {
+                if (daftarProduk[i].getId() == id) {
+                    daftarProduk.erase(daftarProduk.begin() + i);
+                    cout << "Produk dengan ID " << id << " berhasil dihapus.\n";
+                    return;
+                }
+                i++;
+            }
             cout << "Produk dengan ID " << id << " tidak ditemukan.\n";
         }
-    }
 
-    // DELETE
-    // method untuk menghapus produk berdasarkan ID
-    void hapusProduk(int id) {
-        int idx = cariProduk(id);
-        if (idx != -1) {
-            daftarProduk.erase(daftarProduk.begin() + idx);
-            cout << "Produk berhasil dihapus!\n";
-        } else {
-            cout << "Produk dengan ID " << id << " tidak ditemukan.\n";
+        // === destructor === //
+        ~TokoElektronik() {
         }
-    }
-
-    // SEARCH
-    // method untuk mencari produk berdasarkan nama
-    void cariProdukByNama(string keyword) const {
-        bool ketemu = false;
-        cout << "\nHasil pencarian untuk \"" << keyword << "\":\n";
-        for (const auto &p : daftarProduk) {
-            if (p.nama.find(keyword) != string::npos) {
-                cout << "ID: " << p.id
-                     << " | Nama: " << p.nama
-                     << " | Harga: Rp" << p.harga
-                     << " | Stok: " << p.stok
-                     << endl;
-                ketemu = true;
-            }
-        }
-        if (!ketemu) cout << "Produk tidak ditemukan.\n";
-    }
-
-    // DESTRUCTOR
-    ~TokoElektronik() {
-    }
 };

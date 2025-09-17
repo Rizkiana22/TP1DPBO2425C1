@@ -1,120 +1,160 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// class Toko untuk mengelola produk
-class TokoElektronik {
-    // konsep inner class
-    // class Produk untuk menyimpan data produk
-    class Produk {
-        int id;
-        String nama;
-        double harga;
-        int stok;
+// membuat class
+public class TokoElektronik {
+    private int id;
+    private String nama;
+    private int harga;
+    private int stok;
 
-        // constructor
-        Produk(int id, String nama, double harga, int stok) {
-            this.id = id;
-            this.nama = nama;
-            this.harga = harga;
-            this.stok = stok;
-        }
+    // ArrayList untuk menyimpan produk
+    private ArrayList<TokoElektronik> daftarProduk = new ArrayList<>();
 
-        // method untuk menampilkan info produk
-        void tampilkan() {
-            System.out.println("ID: " + id + " | Nama: " + nama +
-                               " | Harga: Rp" + harga + " | Stok: " + stok);
-        }
-    }
-
-    private ArrayList<Produk> daftarProduk; // list untuk menyimpan produk
-
-    // constructor
+    // constructor kosong
     public TokoElektronik() {
-        daftarProduk = new ArrayList<>(); // inisialisasi list
     }
 
-    // Fungsi cari produk dengan parameter output (int[] idx)
-    public boolean cariProduk(int id, int[] idx) {
-        idx[0] = -1; // inisialisasi index produk yang dicari
-        int i = 0; 
-        // mencari produk berdasarkan ID
-        while (i < daftarProduk.size() && idx[0] == -1) {
-            if (daftarProduk.get(i).id == id) {
-                idx[0] = i; // menyimpan index produk yang ditemukan
+    // constructor dengan parameter
+    public TokoElektronik(int id, String nama, int harga, int stok) {
+        this.id = id;
+        this.nama = nama;
+        this.harga = harga;
+        this.stok = stok;
+    }
+
+    // ===== getter =====
+    public int getId() {
+        return this.id;
+    }
+
+    public String getNama() {
+        return this.nama;
+    }
+
+    public int getHarga() {
+        return this.harga;
+    }
+
+    public int getStok() {
+        return this.stok;
+    }
+
+    // ===== setter =====
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public void setHarga(int harga) {
+        this.harga = harga;
+    }
+
+    public void setStok(int stok) {
+        this.stok = stok;
+    }
+
+    // === method === //
+
+    // SEARCH 
+    // method untuk mencari produk berdasarkan id
+    public TokoElektronik cariProduk(int id) {
+        int i = 0;
+        while (i < daftarProduk.size()) {
+            if (daftarProduk.get(i).getId() == id) {
+                return daftarProduk.get(i); // return produk
             }
             i++;
         }
-        return idx[0] != -1;
+        return null; // tidak ditemukan
+    }
+
+    // method cari produk berdasarkan keyword nama
+    public void cariProdukByNama(String keyword) {
+        boolean ketemu = false;
+        for (TokoElektronik p : daftarProduk) {
+            if (p.getNama().toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println("ID: " + p.getId() +
+                   " | Nama: " + p.getNama() +
+                   " | Harga: " + p.getHarga() +
+                   " | Stok: " + p.getStok());
+                ketemu = true;
+            }
+        }
+        if (!ketemu) {
+            System.out.println("Produk dengan keyword '" + keyword + "' tidak ditemukan.");
+        }
     }
 
     // CREATE
-    // method untuk menambah produk baru
-    public void tambahProduk(int id, String nama, double harga, int stok) {
-        daftarProduk.add(new Produk(id, nama, harga, stok)); // menambah produk ke list
-        System.out.println("Produk berhasil ditambahkan!"); 
+    // method untuk menambahkan produk ke vector
+    public void tambahProduk(TokoElektronik p) {
+        daftarProduk.add(p);
+        System.out.println("Produk berhasil ditambahkan!");
     }
 
     // READ
-    // method untuk menampilkan semua produk
+    // method untuk menampilkan produk
     public void tampilkanProduk() {
-        // jika tidak ada produk
-        if (daftarProduk.isEmpty()) {
-            System.out.println("Tidak ada produk.");
-            return;
+        if (daftarProduk.isEmpty()) { // jika arraylist kosong
+            System.out.println("Belum ada produk.");
+        } else { // jika arraylist daftarProduk tidak kosong
+            System.out.println("\nDaftar Produk:");
+            // menampilkan isi arraylist daftarProduk
+            for (TokoElektronik p : daftarProduk) {
+                System.out.println("ID: " + p.getId()
+                        + " | Nama: " + p.getNama()
+                        + " | Harga: " + p.getHarga()
+                        + " | Stok: " + p.getStok());
+            }
         }
-        System.out.println("\n=== Daftar Produk ===");
-        int i = 0;
-        // menampilkan semua produk
-        for (Produk p : daftarProduk) {
-            p.tampilkan();
-        }
-
     }
 
+
     // UPDATE
-    // method untuk mengupdate produk berdasarkan ID
-    public void updateProduk(int id, String namaBaru, double hargaBaru, int stokBaru) {
-        int[] idx = new int[1];
-        // mencari produk berdasarkan ID
-        if (cariProduk(id, idx)) {
-            Produk p = daftarProduk.get(idx[0]);
-            p.nama = namaBaru;
-            p.harga = hargaBaru;
-            p.stok = stokBaru;
-            System.out.println("Produk berhasil diupdate!");
-        } else { // jika produk tidak ditemukan
+    // method untuk mengubah produk di daftarProduk berdasarkan id
+    public void updateProduk(int id) {
+        TokoElektronik p = cariProduk(id); // cari produk dulu
+        if (p == null) {
             System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
+        } else {
+            // kalau produk ada, baru minta input
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Nama baru: ");
+            String nama = sc.nextLine();
+            System.out.print("Harga baru: ");
+            int harga = sc.nextInt();
+            System.out.print("Stok baru: ");
+            int stok = sc.nextInt();
+
+            // update field
+            p.setNama(nama);
+            p.setHarga(harga);
+            p.setStok(stok);
+
+            System.out.println("Produk berhasil diubah!");
         }
     }
 
     // DELETE
-    // method untuk menghapus produk berdasarkan ID
+    // method untuk menghapus produk di daftarProduk
     public void hapusProduk(int id) {
-        int[] idx = new int[1];
-        // mencari produk
-        if (cariProduk(id, idx)) {
-            daftarProduk.remove(idx[0]);
-            System.out.println("Produk berhasil dihapus!");
-        } else {
-            System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
-        }
-    }
-
-    // SEARCH
-    // method untuk mencari produk berdasarkan nama (keyword)
-    public void cariProdukByNama(String keyword) {
-        boolean ketemu = false; // flag untuk menandai jika produk ditemukan
-        System.out.println("\nHasil pencarian untuk \"" + keyword + "\":");
         int i = 0;
-        // mencari produk yang mengandung keyword pada nama
-        while (i < daftarProduk.size() && ketemu == false) {
-            Produk p = daftarProduk.get(i);
-            if (p.nama.contains(keyword)) {
-                p.tampilkan();
-                ketemu = true;
+        boolean found = false;
+        while (i < daftarProduk.size() && found == false) {
+            if (daftarProduk.get(i).getId() == id) {
+                daftarProduk.remove(i);
+                System.out.println("Produk dengan ID " + id + " berhasil dihapus.");
+                found = true;
+                i = daftarProduk.size();
             }
             i++;
         }
-        if (!ketemu) System.out.println("Produk tidak ditemukan."); // jika tidak ada produk yang ditemukan
+        if (!found) {
+            System.out.println("Produk dengan ID " + id + " tidak ditemukan.");
+        }
     }
 }
